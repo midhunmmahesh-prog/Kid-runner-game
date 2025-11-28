@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Mario Kids Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🍄 Super Mario Kids</h1>
+        <div class="hud">
+            <div id="score" class="score">Score: 0</div>
+            <div id="level" class="level">Level: 1</div>
+            <div id="coins" class="coins-collected">Coins: 0</div>
+        </div>
+        <div id="instructions" class="instructions">← → Arrow Keys to Move | SPACE to Jump</div>
+        
+        <div id="game" class="game">
+            <div id="player" class="player"></div>
+            <div id="objects" class="objects"></div>
+            <div id="platforms" class="platforms"></div>
+            <div id="ground" class="ground"></div>
+        </div>
+
+        <div id="gameOverScreen" class="game-over-screen hidden">
+            <div class="game-over-content">
+                <h2>Game Over!</h2>
+                <p id="finalScore">Your Score: 0</p>
+                <p id="finalCoins">Coins: 0</p>
+                <button id="playAgainBtn" class="play-again-btn">Play Again</button>
+            </div>
+        </div>
+
+        <div id="levelCompleteScreen" class="level-complete-screen hidden">
+            <div class="level-complete-content">
+                <h2>Level Complete!</h2>
+                <p id="levelScore">Score: 0</p>
+                <button id="nextLevelBtn" class="next-level-btn">Next Level →</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

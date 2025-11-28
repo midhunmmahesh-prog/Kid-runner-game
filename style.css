@@ -1,0 +1,420 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    max-width: 1000px;
+}
+
+h1 {
+    color: #e74c3c;
+    margin-bottom: 15px;
+    font-size: 2.8em;
+    text-shadow: 3px 3px 0px #f39c12;
+    letter-spacing: 2px;
+}
+
+.hud {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.score, .level, .coins-collected {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    flex: 1;
+    min-width: 120px;
+}
+
+.instructions {
+    font-size: 1.1em;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+/* Game Container */
+#game {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    max-width: 900px;
+    margin: 0 auto 30px;
+    background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);
+    border: 5px solid #e74c3c;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Player Character - Mario Style */
+#player {
+    position: absolute;
+    width: 40px;
+    height: 50px;
+    left: 50px;
+    bottom: 50px;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    border: 3px solid #922b21;
+    border-radius: 5px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    transition: transform 0.1s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#player::before {
+    content: '🔴';
+    font-size: 32px;
+}
+
+#player.jumping {
+    animation: playerJump 0.2s ease-out;
+}
+
+@keyframes playerJump {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.9, 1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Ground */
+#ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: repeating-linear-gradient(90deg, #228B22 0px, #228B22 40px, #1a6b1a 40px, #1a6b1a 80px);
+    border-top: 3px solid #0d4d0d;
+    z-index: 5;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Platforms Container */
+#platforms {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* Platforms */
+.platform {
+    position: absolute;
+    background: repeating-linear-gradient(90deg, #8B4513 0px, #8B4513 30px, #6b3410 30px, #6b3410 60px);
+    border: 2px solid #5a2d0c;
+    border-radius: 3px;
+    z-index: 4;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Objects Container */
+#objects {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* Enemies - Goomba style */
+.enemy {
+    position: absolute;
+    width: 40px;
+    height: 35px;
+    background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+    border: 2px solid #5a2d0c;
+    border-radius: 50% 50% 40% 40%;
+    z-index: 8;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.enemy::before {
+    content: '👾';
+    position: absolute;
+    font-size: 24px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Coins */
+.coin {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500);
+    border: 2px solid #FF8C00;
+    border-radius: 50%;
+    z-index: 7;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2), inset -2px -2px 4px rgba(0, 0, 0, 0.1);
+    animation: coinFloat 0.6s ease-in-out infinite;
+}
+
+.coin::before {
+    content: '🪙';
+    position: absolute;
+    font-size: 16px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes coinFloat {
+    0%, 100% {
+        transform: translateY(0) rotateZ(0deg);
+    }
+    50% {
+        transform: translateY(-8px) rotateZ(10deg);
+    }
+}
+
+/* Mushroom Power-up */
+.mushroom {
+    position: absolute;
+    width: 30px;
+    height: 35px;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    border: 2px solid #922b21;
+    border-radius: 50%;
+    z-index: 7;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    animation: mushroomFloat 0.8s ease-in-out infinite;
+}
+
+.mushroom::before {
+    content: '🍄';
+    position: absolute;
+    font-size: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes mushroomFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Flag - Level Complete */
+.flag {
+    position: absolute;
+    width: 15px;
+    height: 100px;
+    background: linear-gradient(90deg, #8B4513 0%, #6b3410 100%);
+    z-index: 6;
+}
+
+.flag::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 35px;
+    height: 25px;
+    background: #e74c3c;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Game Over Screen */
+.game-over-screen,
+.level-complete-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.game-over-screen.hidden,
+.level-complete-screen.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.game-over-content,
+.level-complete-content {
+    background: white;
+    padding: 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+    animation: popIn 0.4s ease-out;
+    border: 5px solid #e74c3c;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.game-over-content h2,
+.level-complete-content h2 {
+    font-size: 3em;
+    color: #e74c3c;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#finalScore,
+#finalCoins,
+#levelScore {
+    font-size: 1.8em;
+    color: #f39c12;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* Buttons */
+.play-again-btn,
+.next-level-btn {
+    font-size: 1.2em;
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+    margin-top: 20px;
+}
+
+.play-again-btn:hover,
+.next-level-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.6);
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+}
+
+.play-again-btn:active,
+.next-level-btn:active {
+    transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    #game {
+        height: 350px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .hud {
+        gap: 10px;
+    }
+
+    .score, .level, .coins-collected {
+        font-size: 1.2em;
+    }
+
+    .instructions {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    #game {
+        height: 250px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .hud {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .score, .level, .coins-collected {
+        font-size: 1em;
+        min-width: auto;
+    }
+
+    #player {
+        width: 35px;
+        height: 45px;
+        left: 30px;
+    }
+
+    .game-over-content,
+    .level-complete-content {
+        padding: 30px 20px;
+    }
+
+    .game-over-content h2,
+    .level-complete-content h2 {
+        font-size: 2em;
+    }
+
+    #finalScore,
+    #finalCoins,
+    #levelScore {
+        font-size: 1.3em;
+    }
+
+    .play-again-btn,
+    .next-level-btn {
+        font-size: 1em;
+        padding: 12px 30px;
+    }
+}
